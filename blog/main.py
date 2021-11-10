@@ -53,6 +53,10 @@ def update_post(post_id: int, request: schemas.Blog, db: Session = Depends(get_d
 
 @app.delete('/blog/{id}', status_code=status.HTTP_202_ACCEPTED)
 def delete_post(post_id: int, db: Session = Depends(get_db)):
-    db.query(models.Blog).filter(models.Blog.id == post_id).delete(synchronize_session=False)
+    post = db.query(models.Blog).filter(models.Blog.id == post_id)
+    if not post.first():
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='post not found')
+
+    post.delete(synchronize_session=False)
     db.commit()
     return {'detail': 'deleted'}
