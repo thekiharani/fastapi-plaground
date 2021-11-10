@@ -4,3 +4,4 @@ fastapi_env
 .idea
 .DS_Store
 .env
+*.db
