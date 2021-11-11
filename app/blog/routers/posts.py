@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 
 from .. import schemas
 from ..database import get_db
+from ..oauth2 import get_current_user
 from ..repository import posts as post_repository
 
 router = APIRouter(
@@ -14,7 +15,7 @@ router = APIRouter(
 
 
 @router.get('/', response_model=List[schemas.PostsAuthor])
-def get_posts(db: Session = Depends(get_db)):
+def get_posts(db: Session = Depends(get_db), current_user: schemas.User = Depends(get_current_user)):
     return post_repository.index(db)
 
 

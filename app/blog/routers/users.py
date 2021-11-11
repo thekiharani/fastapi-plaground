@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 
 from .. import schemas
 from ..database import get_db
+from ..oauth2 import get_current_user
 from ..repository import users as user_repository
 
 router = APIRouter(
@@ -16,6 +17,11 @@ router = APIRouter(
 @router.get('/', response_model=List[schemas.UserList])
 def get_users(db: Session = Depends(get_db)):
     return user_repository.index(db)
+
+
+@router.get('/profile', response_model=schemas.UserPosts)
+def my_profile(db: Session = Depends(get_db), current_user: schemas.User = Depends(get_current_user)):
+    return user_repository.find_by_email(current_user.email, db)
 
 
 @router.post('/', status_code=status.HTTP_201_CREATED, response_model=schemas.UserList)
