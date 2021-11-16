@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 from fastapi import HTTPException, status
-from .. import models, schemas, hashing
+from auth import models, schemas
+from auth import hashing
 
 
 def index(db: Session):
